@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+
 using namespace std;
 
 class Student {
@@ -22,16 +23,26 @@ public:
     string getName() const {
         return name;
     }
-
     // Getter cho studentID
     string getStudentID() const {
         return studentID;
     }
 
     // Friends
-    void addFriend(const Student& newFriend) {
-        friends.push_back(newFriend);
+    // Add friend by ID
+    void addFriendByID(const string& friendID, const vector<Student>& studentList) {
+        for (const Student& student : studentList) {
+            if (student.getStudentID() == friendID) {
+                friends.push_back(student);
+                cout << "Added " << student.getName() << " as a friend of " << name << endl;
+                return;
+            }
+        }
+        cout << "Student with ID " << friendID << " not found." << endl;
     }
+    // void addFriend(const Student& newFriend) {
+    //     friends.push_back(newFriend);
+    // }
 
     void removeFriend(string friendID) {
         for (auto it = friends.begin(); it != friends.end(); ++it) {
@@ -119,6 +130,10 @@ public:
         displayHobbies();
         displayHabits();
     }
+    void displayStudent() const{
+        cout << "Student Name: " << name << endl;
+        cout << "Student ID: " << studentID << endl;
+    }
 };
 // Hàm tạo sinh viên
 Student createStudent() {
@@ -158,7 +173,6 @@ Student createStudent() {
     return newStudent;
 }
 
-
 int main() {
     // Tạo danh sách sinh viên
     vector<Student> studentList;
@@ -181,7 +195,30 @@ int main() {
         cin >> choice;
         cin.ignore();
     }
+    int temp = 1;
+    cout << "\nList of student:" << endl;
+    for (const Student& student : studentList) {
+        cout << "Student number " << temp << ":" << endl;
+        temp++;
+        student.displayStudent();
+        cout << "---------------------------" << endl;
 
+    }
+    // Add friends by ID
+    int x,y;
+    cout << " choose 2 students which u want them become friends" << endl;
+    cin >> x;
+    cin >> y;
+    x--;
+    y--;
+    if ((x+1 > temp)||(y+1 > temp))
+    {
+        cout << "The student u want to add friends not in list. Try Again" << endl;
+    }
+    else {
+        studentList[x].addFriendByID(studentList[y].getStudentID(), studentList);
+        studentList[y].addFriendByID(studentList[x].getStudentID(), studentList);
+    }
     // Hiển thị thông tin tất cả sinh viên
     cout << "\nAll students information:" << endl;
     for (const Student& student : studentList) {
