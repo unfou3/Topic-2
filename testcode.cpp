@@ -53,6 +53,9 @@ public:
         }
     }
 
+    int countFriends() const{
+        return friends.size();
+    }
     // Hiển thị thông tin bạn bè
     void displayFriends() const {
         cout << "Friends of " << name << ": ";
@@ -225,7 +228,22 @@ int main() {
         student.displayInfo();
         cout << "---------------------------" << endl;
     }
-
+    // Hiển thị thông tin sinh viên có nhiều bạn bè nhất
+    int max = 0;
+    for (const Student& student : studentList) {
+        if (student.countFriends() > max)
+        {
+            max = student.countFriends();
+        }
+    }
+    for (const Student& student : studentList) {
+        if (student.countFriends() == max)
+        {
+            student.displayFriends();
+        }
+        
+    }
+    
     return 0;
 }
 
