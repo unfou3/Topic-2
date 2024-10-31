@@ -6,6 +6,8 @@
 #include "students.cpp"
 #include <sstream>
 #include <fstream>
+#include <algorithm>
+#include <unordered_set>
 using namespace std;
 
 static int getord(int SSID, vector<Student> list) {
@@ -161,8 +163,135 @@ static vector<Student> student_retrieve(const string& filename) {
 }
 
 
-static void print_full(const vector<Student> stdu) {
-	for ( int i = 0; i < stdu.size(); i++)
+
+
+// đếm số phần tử chung của 2 vector
+static int countCommonElements(const vector<int>& vec1, const vector<int>& vec2) {
+	unordered_set<int> elementsSet(vec1.begin(), vec1.end()); // lấy các phần tử ko trùng lặp của vector 1
+	int count = 0;
+
+	for (const int& element : vec2) {
+		if (elementsSet.find(element) != elementsSet.end()) {
+			count++;
+		}
+	}
+
+	return count;
+}
+
+
+static int linked_l(const Student a, const Student b) { // tính số sở thích/thói quen/bạn chung giữa 2 student
+	int temp = 0;
+	temp +=  countCommonElements(a.hobbies, b.hobbies) + countCommonElements(a.habits , b.habits) + countCommonElements(a.friendcode, b.friendcode)/2 ;
+	return temp;
+}
+static vector<int> findTopNPositions(const vector<int>& vec, int n) {
+	// Create a vector of pairs to store values and their original positions
+	vector<pair<int, int>> indexedVec(vec.size());
+	for (int i = 0; i < vec.size(); ++i) {
+		indexedVec[i] = { vec[i], i };
+	}
+
+	// Sort based on the values in descending order
+	sort(indexedVec.begin(), indexedVec.end(), greater<pair<int, int>>());
+
+	// Extract the positions of the top n elements
+	vector<int> topPositions;
+	for (int i = 0; i < n && i < indexedVec.size(); ++i) {
+		topPositions.push_back(indexedVec[i].second);
+	}
+
+	return topPositions;
+}
+
+
+static vector<int> probToF(vector<Student>& list, int SSID, int n) {
+	int length = list.size();
+	int order = getord(SSID, list);
+	vector<int> probality;
+	vector<int> SID_compare;
+	for (int i = 0; i < length; i++)
+	{
+		if (i == order) {
+			probality.push_back(0);
+			SID_compare.push_back(SSID);
+		}
+		else
+		{
+			probality.push_back(linked_l(list[getord(SSID, list)], list[i]));
+			SID_compare.push_back(list[i].Sid);
+		}
+	}
+	vector<int> topn = findTopNPositions(probality, n);
+	vector<int> SID_output;
+	for (int k = 0; k < n; k++)
+	{
+		SID_output.push_back(SID_compare[topn[k]]);
+	}
+	return SID_output;
+}
+
+static int isFriend(const Student a, const Student b) {
+	if ((count(a.friendcode.begin(), a.friendcode.end(), b.Sid)) > 0) {
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+static void DisplayGraph2D(const vector<Student> list) {
+	for (int i = 0; i < list.size(); i++)
+	{
+		for (int k = 0;k < list.size(); k++) {
+			cout << (isFriend(list[i], list[k])) << " ";
+		}
+		cout << endl;
+	}
+}
+
+
+static int findLargestVectorIndex(const vector<Student>& list_St) {
+	size_t maxSize = 0;
+	int largestIndex = -1;
+
+	for (size_t i = 0; i < list_St.size(); ++i) {
+		if (list_St[i].friendcode.size() > maxSize) {
+			maxSize = list_St[i].friendcode.size();
+			largestIndex = i;
+		}
+	}
+
+	return list_St[largestIndex].Sid;
+}
+
+static vector<int> findLargestVector(const vector<Student>& list_St) {
+	size_t maxSize = 0;
+	vector<int> largestVectors;
+
+	for (size_t i = 0; i < list_St.size(); ++i) {
+		if (list_St[i].friendcode.size() > maxSize) {
+			maxSize = list_St[i].friendcode.size();
+			largestVectors.clear();
+			largestVectors.push_back(list_St[i].Sid);
+		} // tương tự code trên
+		else if (list_St[i].friendcode.size() == maxSize) {
+			largestVectors.push_back(list_St[i].Sid); // thêm các phần tử khác cùng size, trả lại kq là mssv
+		}
+	}
+	return largestVectors;
+}
+static vector<string> codeToOutput(vector<int> a, vector<string> b) {
+	vector<string> temp;
+	for (int i = 0; i < a.size(); i++)
+	{
+		temp.push_back(b[a[i] -1]);
+	}
+	return temp;
+}
+static void print_full(vector<Student> stdu, vector<string> hbby, vector<string> hbit) {
+	for (int i = 0; i < stdu.size(); i++)
 	{
 		cout << "Sinh vien thu " << i + 1 << " : " << endl;
 		cout << "Ten : " << stdu[i].name << endl;
@@ -171,11 +300,19 @@ static void print_full(const vector<Student> stdu) {
 		cout << "\n";
 		print_friend(stdu[i].Sid, stdu);
 		cout << "\n";
-		cout << "So thich : ";
+		cout << "So thich (code) : ";
 		print_vct(stdu[i].hobbies);
 		cout << "\n";
-		cout << "thoi quen : ";
+		cout << "So thich (real) : " << "\n";
+		print_list_vct(codeToOutput(stdu[i].hobbies, hbby));
+		cout << "thoi quen (code): ";
 		print_vct(stdu[i].habits);
+		cout << "\n";
+		cout << "Thoi quen (real) : " << "\n";
+		print_list_vct(codeToOutput(stdu[i].habits, hbit));
+		cout << "\n";
+		cout << "Goi y tim ban :)) : ";
+		print_vct(probToF(stdu, stdu[i].Sid, 7));
 		cout << "\n";
 		cout << "------------------------------------";
 		cout << endl;

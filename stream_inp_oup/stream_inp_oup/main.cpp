@@ -31,13 +31,34 @@ int main() {
 	//b.full_ini(20233351, "hip", { 20233748, 20223987 }, { 1,3,9 }, { 2,5,6,12 });
 	//c.half_ini(20233347, "hai ac");
 	//d.full_ini(20233391, "hiep", { 20233948, 20221987 }, { 1,3,5 }, { 2,6,8,12 });
-
-	list = student_retrieve("student_info.txt");
 	//for (int i = 0; i < list.size(); i++)
 	//{
 	//	student_save(list[i]);
 	//}
-	print_full(list);
-	cout << countLines("student_info.txt");
+
+
+
+
+
+	vector<string> Habit_list;
+	vector<string> Hobby_list;
+	Habit_list = output_habit();
+	Hobby_list = outputhb();
+	list = student_retrieve("student_info.txt");
+	add_friend(20233330, 20233348, list);
+
+	print_full(list, Hobby_list, Habit_list);
+	cout << countLines("student_info.txt") << endl;
+	print_vct(probToF(list, 20233341, 7));
+	cout << "\n \n \n \n \n \n";
+	DisplayGraph2D(list);
+	cout << "\n \n \n \n \n \n";
+	cout << "Top sinh vien co nhieu ban nhat la : ";
+	print_vct(findLargestVector(list));
+	cout << "    Voi so ban: " << list[getord(findLargestVector(list)[0], list)].friendcode.size();
+	cout << "\n \n \n \n \n \n";
+	print_list_vct(Habit_list);
+	cout << "\n \n \n \n \n \n";
+	print_list_vct(Hobby_list);
 	return -1;
 }
