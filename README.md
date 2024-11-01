@@ -1,4 +1,4 @@
-#  Gợi ý tìm bạn trên mạng xa hộ
+#  Gợi ý tìm bạn trên mạng xa hội
 ### Requirement
 ```
 Tạo một mạng xã hội của lớp  
