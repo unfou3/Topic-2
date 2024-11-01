@@ -46,7 +46,7 @@ static void inputindex(int n, vector<Student>& list) { // thêm n phần tử
 	}
 }
 
-static vector<int> string_to_vector_int_pros(string a) {
+static vector<int> string_to_vector_int_pros(string a) { // call hàm chuyển string to vector, dùng trong việc dịch lại file txt
 	vector<int> nums;
 	stringstream ss(a); // tưởng tượng đang nhập a từ bàn phím, dùng để tách dấu trắng
 	int pt;
@@ -57,19 +57,18 @@ static vector<int> string_to_vector_int_pros(string a) {
 	return nums;
 }
 
-static void print_vct(vector<int> a) {
+static void print_vct(vector<int> a) { // in các phần tử dạng int của vector, cách nhau bởi dấu cách
 	for (int i = 0; i < a.size(); i++) {
 		cout << a[i] << " ";
 	}
 }
-
-static void print_list_vct(vector<string> b) {
+static void print_list_vct(vector<string> b) { // in các phần tử dạng string, cách nhau dấu cách và được đánh số
 	for (int i = 0; i < b.size(); i++) {
 		cout << i+1 << ". " << b[i] << "\n";
 	}
 }
 
-static string vectorToString(vector<int> vec) {
+static string vectorToString(vector<int> vec) { // chuyển vector sang string, các phần tử cách nhau bởi dấu cách
 	stringstream ss;
 	for (size_t i = 0; i < vec.size(); ++i) {
 		if (i != 0) {
@@ -99,7 +98,7 @@ static void student_save(Student a) { // lưu data vào file student_info.txt
 		cerr << "loi file luu thong tin student" << endl;
 	}
 }
-static int countLines(const string& filename) {
+static int countLines(const string& filename) { // trả về số dòng của 1 file, lưu ý file phải cùng directory với code và .exe
 	ifstream file(filename);
 	int lineCount = 0;
 	string line;
@@ -117,7 +116,7 @@ static int countLines(const string& filename) {
 	return lineCount;
 }
 
-static string read_Specific_Line(const string& filename, int targetLine) {
+static string read_Specific_Line(const string& filename, int targetLine) { // đọc line nào đó của 1 file
 	ifstream file(filename);
 	string line;
 	int currentLine = 1;
@@ -131,10 +130,10 @@ static string read_Specific_Line(const string& filename, int targetLine) {
 			currentLine++;
 		}
 		file.close();
-		cerr << "The file has less than " << targetLine << " lines." << endl;
+		cerr << "File nay it hon " << targetLine << " dong" << endl;
 	}
 	else {
-		cerr << "Unable to open file." << endl;
+		cerr << "File loi" << endl;
 	}
 
 	return "";
@@ -185,7 +184,7 @@ static int linked_l(const Student a, const Student b) { // tính số sở thíc
 	temp +=  countCommonElements(a.hobbies, b.hobbies) + countCommonElements(a.habits , b.habits) + countCommonElements(a.friendcode, b.friendcode)/2 ;
 	return temp;
 }
-static vector<int> findTopNPositions(const vector<int>& vec, int n) {
+static vector<int> findTopNPositions(const vector<int>& vec, int n) {   // 1/2 code chôm từ document của vector :))
 	// Create a vector of pairs to store values and their original positions
 	vector<pair<int, int>> indexedVec(vec.size());
 	for (int i = 0; i < vec.size(); ++i) {
@@ -205,7 +204,7 @@ static vector<int> findTopNPositions(const vector<int>& vec, int n) {
 }
 
 
-static vector<int> probToF(vector<Student>& list, int SSID, int n) {
+static vector<int> probToF(vector<Student>& list, int SSID, int n) { // hàm lấy list f tượng trưung cho độ gần giữa 2 node
 	int length = list.size();
 	int order = getord(SSID, list);
 	vector<int> probality;
@@ -231,7 +230,7 @@ static vector<int> probToF(vector<Student>& list, int SSID, int n) {
 	return SID_output;
 }
 
-static int isFriend(const Student a, const Student b) {
+static int isFriend(const Student a, const Student b) { // hàm check bạn bè
 	if ((count(a.friendcode.begin(), a.friendcode.end(), b.Sid)) > 0) {
 		return 1;
 	}
@@ -241,7 +240,7 @@ static int isFriend(const Student a, const Student b) {
 	}
 }
 
-static void DisplayGraph2D(const vector<Student> list) {
+static void DisplayGraph2D(const vector<Student> list) { //hàm hiển thị vector bạn bè
 	for (int i = 0; i < list.size(); i++)
 	{
 		for (int k = 0;k < list.size(); k++) {
@@ -252,7 +251,7 @@ static void DisplayGraph2D(const vector<Student> list) {
 }
 
 
-static int findLargestVectorIndex(const vector<Student>& list_St) {
+static int findLargestVectorIndex(const vector<Student>& list_St) { // tìm node nhiều bạn nhất
 	size_t maxSize = 0;
 	int largestIndex = -1;
 
@@ -266,7 +265,7 @@ static int findLargestVectorIndex(const vector<Student>& list_St) {
 	return list_St[largestIndex].Sid;
 }
 
-static vector<int> findLargestVector(const vector<Student>& list_St) {
+static vector<int> findLargestVector(const vector<Student>& list_St) { // tìm vector lớn nhất (nhiều phần tử)
 	size_t maxSize = 0;
 	vector<int> largestVectors;
 
@@ -282,7 +281,7 @@ static vector<int> findLargestVector(const vector<Student>& list_St) {
 	}
 	return largestVectors;
 }
-static vector<string> codeToOutput(vector<int> a, vector<string> b) {
+static vector<string> codeToOutput(vector<int> a, vector<string> b) {  // dịch code sang chữ từ 1 vector từ điển
 	vector<string> temp;
 	for (int i = 0; i < a.size(); i++)
 	{
@@ -290,7 +289,7 @@ static vector<string> codeToOutput(vector<int> a, vector<string> b) {
 	}
 	return temp;
 }
-static void print_full(vector<Student> stdu, vector<string> hbby, vector<string> hbit) {
+static void print_full(vector<Student> stdu, vector<string> hbby, vector<string> hbit) { //in full thông tin suc vat
 	for (int i = 0; i < stdu.size(); i++)
 	{
 		cout << "Sinh vien thu " << i + 1 << " : " << endl;
