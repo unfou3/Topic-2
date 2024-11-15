@@ -140,7 +140,7 @@ static string read_Specific_Line(const string& filename, int targetLine) { // đ
 }
 
 
-static vector<Student> student_retrieve(const string& filename) {
+static vector<Student> student_retrieve(const string& filename) {  //đọc thông tin từng entry từ file nhập tên bằng string, trả về vector student
 	static vector<Student> temp_list;
 	int records = countLines(filename) / 5;
 	int targetpt = 0;
