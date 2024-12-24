@@ -4,3 +4,5 @@
 ### Result
 - Kết quả được hiển thị trong file dothitomau.dot, tập tin này biển diễn đồ thị trong ngôn ngữ DOT với các đỉnh được tô màu theo yêu cầu.
 - Có thể dùng extension Graphviz có sẵn trong VS CODE để hiện thị bên cạnh
+### show result
+- dot -Tpng dothitomau.dot -o dothitomau.png
