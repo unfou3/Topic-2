@@ -13,5 +13,7 @@ Biểu diễn mạng bằng một cấu trúc đồ thị
 
 Gợi ý tìm bạn cho một bạn dựa trên một số tiêu chí (sở thích, thói quen, v.v.)  
 
-Tìm bạn có nhiều bạn nhất trong mạng 
+Tìm bạn có nhiều bạn nhất trong mạng
+
+Our brand new function: Chatlog Function
 ```
