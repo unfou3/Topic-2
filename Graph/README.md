@@ -6,3 +6,4 @@
 - Có thể dùng extension Graphviz có sẵn trong VS CODE để hiện thị bên cạnh
 ### show result
 - dot -Tpng dothitomau.dot -o dothitomau.png
+- Cần biểu diễn hình ảnh trong CLI
