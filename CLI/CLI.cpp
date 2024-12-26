@@ -2,8 +2,11 @@
 #include <cstdlib>
 #include <windows.h>
 #include <string>
+#include <Lmcons.h>
+#include <conio.h>
 
 using namespace std;
+
 // ANSI color codes
 #define RESET   "\033[0m"
 #define RED     "\033[31m"
@@ -14,33 +17,116 @@ using namespace std;
 #define CYAN    "\033[36m"
 #define WHITE   "\033[37m"
 
-void showMainMenu();
+void showMainMenu(int role);
 void ChangeandAdd();
 void SuggestFriends();
 void ShowasGraph();
 void ShowList();
-void CLI();
+void CLI(int role);
+int chooseUser();
+void printSystemInfo();
 
 int main() {
-    CLI();
+    int role = chooseUser();
+    if (role != 0) {
+        CLI(role);
+    } else {
+        std::cout << GREEN << "Exiting... Goodbye!\n" << RESET;
+    }
     return 0;
 }
+typedef LONG(WINAPI* RtlGetVersionPtr)(PRTL_OSVERSIONINFOW);
 
-void showMainMenu() {
-    system("cls"); // Xóa màn hình
-    std::cout << YELLOW << "USER: admin      COMPUTERNAME: DESKTOP-XXXXXX    TPM: NONE | MD5: ENABLE\n";
-    std::cout << CYAN <<"CURRENT OS: Windows 10 Pro  2024  100H2  19045.4291  64bit  COMPACT + DEF\n";
-    std::cout << MAGENTA <<"TIME ZONE: UTC+07:00   |   Bangkok, Hanoi, Jakarta\n";
-    std::cout << GREEN <<"FOLLOW US ON FACEBOOK\n\n";
+void printSystemInfo() {
+    // Lấy tên máy tính
+    char computerName[MAX_COMPUTERNAME_LENGTH + 1];
+    DWORD size = sizeof(computerName);
+    if (GetComputerNameA(computerName, &size)) {
+        std::cout << YELLOW << "COMPUTER NAME: " << computerName << "\n";
+    } else {
+        std::cerr << "Failed to get computer name.\n";
+    }
 
+    // Lấy tên người dùng
+    char userName[UNLEN + 1]; // UNLEN được định nghĩa trong <Lmcons.h>
+    size = sizeof(userName);
+    if (GetUserNameA(userName, &size)) {
+        std::cout << CYAN << "USER NAME: " << userName << "\n";
+    } else {
+        std::cerr << "Failed to get user name.\n";
+    }
+
+    // Lấy thông tin hệ điều hành
+    RTL_OSVERSIONINFOEXW osvi;
+    ZeroMemory(&osvi, sizeof(osvi));
+    osvi.dwOSVersionInfoSize = sizeof(osvi);
+
+    RtlGetVersionPtr fnRtlGetVersion = (RtlGetVersionPtr)GetProcAddress(
+        GetModuleHandleA("ntdll.dll"), "RtlGetVersion");
+
+    if (fnRtlGetVersion != nullptr) {
+        if (fnRtlGetVersion((PRTL_OSVERSIONINFOW)&osvi) == 0) {
+            std::cout << BLUE << "OS VERSION: " << osvi.dwMajorVersion << "."
+                      << osvi.dwMinorVersion << " (Build " << osvi.dwBuildNumber << ")\n";
+        } else {
+            std::cerr << "Failed to get OS version.\n";
+        }
+    } else {
+        std::cerr << "RtlGetVersion not available.\n";
+    }
+
+    // Lấy thông tin múi giờ
+    TIME_ZONE_INFORMATION tzInfo;
+    if (GetTimeZoneInformation(&tzInfo) != TIME_ZONE_ID_INVALID) {
+        std::wcout << RED << L"TIME ZONE: " << tzInfo.StandardName << L" (UTC "
+                   << tzInfo.Bias / -60 << L")\n";
+    } else {
+        std::cerr << "Failed to get time zone information.\n";
+    }
+}
+
+// --- Choose User Role ---
+int chooseUser() {
+    int option;
+    std::cout << MAGENTA << "Who are you?\n";
+    std::cout << CYAN << "1. Admin\n";
+    std::cout << "2. User\n";
+    std::cout << "0. Exit\n";
+    std::cout << YELLOW << "Type option: " << RESET;
+    std::cin >> option;
+
+    switch (option) {
+        case 1:
+            return 1; // Admin
+        case 2:
+            return 2; // User
+        case 0:
+            return 0; // Exit
+        default:
+            std::cout << RED << "Invalid option. Try again.\n" << RESET;
+            return chooseUser();
+    }
+}
+
+// --- Show Main Menu ---
+void showMainMenu(int role) {
+    system("cls"); // Clear screen
+    printSystemInfo();
+    std::cout << GREEN << "FOLLOW US ON FACEBOOK\n\n";
     std::cout << WHITE << "Trinh | Hiep | Hai | Binh\n";
     std::cout << "---------------------------------------------\n";
-    std::cout << BLUE << "\n--- Show Menu ---\n" << RESET;
-    std::cout << CYAN << "1. Chinh sua | Them | Bot\n";
-    std::cout << "2. Goi y tim ban\n";
-    std::cout << "3. Bien dien mang bang cau truc do thi\n";
-    std::cout << "4. In toan bo danh sach\n";
-    std::cout << "0. Exit\n" << RESET;
+    std::cout << BLUE << "\n--- Main Menu ---\n" << RESET;
+
+    if (role == 2) { // Normal User Menu
+        std::cout << CYAN << "0. Exit\n";
+        std::cout << "1. Change | Add | Delete\n";
+        std::cout << "2. Suggest Friends\n";
+    } else if (role == 1) { // Admin Menu
+        std::cout << CYAN << "0. Exit\n";
+        std::cout << "1. Show as Graph\n";
+        std::cout << "2. Print List\n";
+    }
+
     std::cout << YELLOW << "Type option: " << RESET;
 }
 
@@ -57,16 +143,13 @@ void ChangeandAdd() {
 
     switch (option) {
         case 1:
-            system("");
-            std::cout << GREEN << "\n" << RESET;
+            std::cout << GREEN << "Change operation selected.\n" << RESET;
             break;
         case 2:
-            system("");
-            std::cout << GREEN << "\n" << RESET;
+            std::cout << GREEN << "Add operation selected.\n" << RESET;
             break;
         case 3:
-            system("");
-            std::cout << GREEN << "\n" << RESET;
+            std::cout << GREEN << "Delete operation selected.\n" << RESET;
             break;
         case 0:
             break;
@@ -75,34 +158,31 @@ void ChangeandAdd() {
     }
 }
 
-// --- Suggest Friends Optiones ---
+// --- Suggest Friends Options ---
 void SuggestFriends() {
     int option;
-    std::cout << MAGENTA << "\n--- Suggest Friends Optiones ---\n" << RESET;
+    std::cout << MAGENTA << "\n--- Suggest Friends Options ---\n" << RESET;
     std::cout << CYAN << "1. Suggest as Hobby\n";
     std::cout << "2. Suggest as Habit\n";
-    std::cout << "3. Suggest as \n";
+    std::cout << "3. Suggest as Other\n";
     std::cout << "0. Back\n" << RESET;
     std::cout << YELLOW << "Type option: " << RESET;
     std::cin >> option;
 
     switch (option) {
         case 1:
-            system("");
-            std::cout << GREEN << "\n" << RESET;
+            std::cout << GREEN << "Suggesting friends by Hobby...\n" << RESET;
             break;
         case 2:
-            system("");
-            std::cout << GREEN << "\n" << RESET;
+            std::cout << GREEN << "Suggesting friends by Habit...\n" << RESET;
             break;
         case 3:
-            system("");
-            std::cout << GREEN << "\n" << RESET;
+            std::cout << GREEN << "Suggesting friends by Other criteria...\n" << RESET;
             break;
         case 0:
             break;
         default:
-            std::cout << RED << "\n" << RESET;
+            std::cout << RED << "Invalid option.\n" << RESET;
     }
 }
 
@@ -110,7 +190,8 @@ void SuggestFriends() {
 void ShowasGraph() {
     int option;
     std::cout << MAGENTA << "\n--- Show as Graph ---\n" << RESET;
-    std::cout << CYAN << "1. Show\n";
+    std::cout << CYAN << "1. Show as adjacency matrix\n";
+    std::cout << "2.Show as png\n";
     std::cout << "0. Back\n" << RESET;
     std::cout << YELLOW << "Type option: " << RESET;
     std::cin >> option;
@@ -119,14 +200,24 @@ void ShowasGraph() {
         case 1:
             system("");
             std::cout << GREEN << "\n" << RESET;
+            std::cout << YELLOW << "\nPress any key to comeback and continue the program...\n";
+            _getch(); // Chờ người dùng nhấn phím bất kỳ
+            break;
+        case 2:
+            system("");
+            std::cout << GREEN << "\n" << RESET;
+            std::cout << YELLOW << "\nPress any key to comeback and continue the program...\n";
+            _getch(); // Chờ người dùng nhấn phím bất kỳ
             break;
         case 0:
             break;
         default:
             std::cout << RED << "Invalid option.\n" << RESET;
     }
+
 }
 
+// --- Show List ---
 // --- Show List ---
 void ShowList() {
     int option;
@@ -142,14 +233,20 @@ void ShowList() {
         case 1:
             system("");
             std::cout << GREEN << "\n" << RESET;
+            std::cout << YELLOW << "\nPress any key to comeback and continue the program...\n";
+            _getch(); // Chờ người dùng nhấn phím bất kỳ
             break;
         case 2:
             system("");
             std::cout << GREEN << "\n" << RESET;
+            std::cout << YELLOW << "\nPress any key to comeback and continue the program...\n";
+            _getch(); // Chờ người dùng nhấn phím bất kỳ
             break;
         case 3:
             system("");
             std::cout << GREEN << "n" << RESET;
+            std::cout << YELLOW << "\nPress any key to comeback and continue the program...\n";
+            _getch(); // Chờ người dùng nhấn phím bất kỳ
             break;
         case 0:
             break;
@@ -157,20 +254,28 @@ void ShowList() {
             std::cout << RED << "Invalid option.\n" << RESET;
     }
 }
-void CLI(){
+
+// --- Command Line Interface ---
+void CLI(int role) {
     int option;
     do {
-        showMainMenu();
+        showMainMenu(role);
         std::cin >> option;
 
-        switch (option) {
-            case 1: ChangeandAdd(); break;
-            case 2: SuggestFriends(); break;
-            case 3: ShowasGraph(); break;
-            case 4: ShowList(); break;
-            case 0: std::cout << GREEN << "Exiting... Goodbye!\n" << RESET; break;
-            default: std::cout << RED << "Invalid option. Try again.\n" << RESET;
+        if (role == 2) { // Normal User
+            switch (option) {
+                case 1: ChangeandAdd(); break;
+                case 2: SuggestFriends(); break;
+                case 0: std::cout << GREEN << "Exiting... Goodbye!\n" << RESET; break;
+                default: std::cout << RED << "Invalid option. Try again.\n" << RESET;
+            }
+        } else if (role == 1) { // Admin
+            switch (option) {
+                case 1: ShowasGraph(); break;
+                case 2: ShowList(); break;
+                case 0: std::cout << GREEN << "Exiting... Goodbye!\n" << RESET; break;
+                default: std::cout << RED << "Invalid option. Try again.\n" << RESET;
+            }
         }
     } while (option != 0);
-
 }
