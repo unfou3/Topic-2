@@ -15,5 +15,4 @@ Gợi ý tìm bạn cho một bạn dựa trên một số tiêu chí (sở thí
 
 Tìm bạn có nhiều bạn nhất trong mạng
 
-Our brand new function: Chatlog Function
 ```
