@@ -2,6 +2,8 @@
 #include <vector>
 #include <cstdio>
 #include <fstream>
+#include <stdio.h>
+#include <stdbool.h>
 
 using namespace std;
 
@@ -42,6 +44,7 @@ void color_g(int u, int v, FILE* fout) {
         fprintf(fout, "%d [fillcolor=DarkCyan, style=filled];\n", v);
     }
 }
+//check x i co phai canh ke hay khong de to mau
 
 bool check(int x, int t) {
     for (int i = 1; i <= n; i++) {
@@ -51,7 +54,7 @@ bool check(int x, int t) {
     }
     return true;
 }
-
+//kiểm tra xem có bao nhiêu đỉnh có thể tô được màu t rồi tô màu t
 int dinh_max(int t) {
     int dem = 0;
     for (int i = 1; i <= n; i++) {
