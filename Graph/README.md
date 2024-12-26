@@ -1,4 +1,4 @@
-#  TÔ MÀU ĐỒ THỊ
+#  BIỂU DIỄN ĐỒ THỊ
 ## Compile and Run
 - Mở và điền input vào file dothi.txt với dòng đầu là n đỉnh m cạnh, m dòng tiếp theo là danh sách cạnh của đồ thị đó . 
 ### Result
