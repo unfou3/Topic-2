@@ -42,13 +42,13 @@ static void printfcode(int SSID, vector<Student>list) { // in code bạn bè
 	}
 }
 
-static void inputindex(int n, vector<Student>& list) { // thêm n phần tử
-	for (int t = 0; t < n; t++) {
-		Student temp;
-		temp.full_userin(list);
-		list.push_back(temp);
-	}
-}
+// static void inputindex(int n, vector<Student>& list) { // thêm n phần tử
+// 	for (int t = 0; t < n; t++) {
+// 		Student temp;
+// 		temp.full_userin(list, Habit_list, Hobby_list);
+// 		list.push_back(temp);
+// 	}
+// }
 
 static vector<int> string_to_vector_int_pros(string a) { // call hàm chuyển string to vector, dùng trong việc dịch lại file txt
 	vector<int> nums;
@@ -69,6 +69,11 @@ static void print_vct(vector<int> a) { // in các phần tử dạng int của v
 static void print_list_vct(vector<string> b) { // in các phần tử dạng string, cách nhau dấu cách và được đánh số
 	for (int i = 0; i < b.size(); i++) {
 		cout << i+1 << ". " << b[i] << "\n";
+	}
+}
+static void printing_Friend_name(Student std, vector<Student>& stdlist) { // in tên bạn bè
+	for (int i = 0; i < std.friendcode.size(); i++) {
+		cout << "ban thu " << i + 1 << " ten la: " << stdlist[getord(std.friendcode[i], stdlist)].name << " co mssv : " << std.friendcode[i]<<endl ;
 	}
 }
 

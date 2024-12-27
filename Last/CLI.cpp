@@ -10,8 +10,7 @@
 #include "dataprocess.cpp"
 #include <fstream>
 #include "makedot.cpp"
-#include "hobbycode.cpp"
-#include "habitc.cpp"
+
 
 using namespace std;
 
@@ -88,7 +87,7 @@ void showInforesult(int Sid, vector<Student> list) {
         if (list[i].Sid == Sid) {
             std::cout << GREEN << "Name of Student " << Sid << ": " << list[i].name << "\n" << RESET;
             std::cout << GREEN << "Friends of Student " << Sid << ":\n" << RESET;
-            print_vct(list[i].friendcode);
+            printing_Friend_name(list[i], list);
             cout << "\n";
             std::cout << GREEN << "Hobbies of Student " << Sid << ":\n" << RESET;
             print_list_vct(codeToOutput(list[i].hobbies, Hobby_list));
@@ -107,7 +106,7 @@ void showInforesult(int Sid, vector<Student> list) {
 
 void AddStudent(){
     Student temp;
-    temp.full_userin(list);
+    temp.full_userin(list, Habit_list, Hobby_list);
     list.push_back(temp);
     student_save(temp);
 }

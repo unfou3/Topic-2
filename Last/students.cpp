@@ -6,7 +6,8 @@
 #include <vector>
 #include <stdlib.h>
 #include <algorithm>
-
+#include "hobbycode.cpp"
+#include "habitc.cpp"
 using namespace std;
 #define RESET   "\033[0m"
 #define RED     "\033[31m"
@@ -18,6 +19,19 @@ private:
 	}
 	
 public:
+	static int getord(int SSID, vector<Student> list) {
+		for (auto a = 0; a < list.size(); a++) {
+			if (list[a].Sid == SSID) {
+				// cout << "phan tu o vi tri : " << a + 1 << endl;
+				return a;
+			}
+		}
+	}
+	static void print_list_vct(vector<string> b) { // in các phần tử dạng string, cách nhau dấu cách và được đánh số
+	for (int i = 0; i < b.size(); i++) {
+		cout << i+1 << ". " << b[i] << "\n";
+	}
+}
 	vector<Student> friends;
 	vector<int> hobbies;  // Danh sách sở thích
 	vector<int> habits;   // Danh sách thói quen
@@ -51,7 +65,7 @@ public:
 		}
 		return 0;
 	}
-	void full_userin(vector<Student> list_stdu) {
+	void full_userin(vector<Student>& list_stdu, vector<string> Habit_list, vector<string> Hobby_list) {
 		int i_Sid;
 		string i_name;
 		vector<int> i_friendcode; 
@@ -68,7 +82,6 @@ public:
 				cout << "This student have added before, please enter another student id : ";
 				cin >> tempSid;
 			}
-			
 		} while (check_user2(tempSid, list_stdu));
 		
 		cout << endl << "Enter name of the student: ";
@@ -80,25 +93,51 @@ public:
 			cin >> temp;
 			if (temp == -1) {
 				break;
+			} if (check_user2(temp, list_stdu))
+			{
+				i_friendcode.push_back(temp);
+				list_stdu[getord(temp, list_stdu)].addfriendcode(i_Sid);
+
 			}
-			i_friendcode.push_back(temp);
+			else
+			{
+				cout << "This student is not in the list, please enter another student id : ";
+			}
+				// list_stdu[getord(tempSid, list_stdu)].addfriendcode(tempSid);
+			
 		}
 		cout << endl;
+		cout << "hobbies list: \n";
+		print_list_vct(Hobby_list);
 		cout << "Enter hobbies of the student, enter -1 to stop : " << endl;
 		while (true) {
 			cin >> temp;
 			if (temp == -1) {
 				break;
+			} if (temp > Hobby_list.size() || temp < 1)
+			{
+				cout << "This hobby is not in the list, please enter another hobby code : ";
 			}
-			i_hobbies.push_back(temp);
+			else
+			{
+				i_hobbies.push_back(temp);
+			}
 		}
+		cout << "habits list: \n";
+		print_list_vct(Habit_list);
 		cout << "Enter habits of the student, enter -1 to stop : " << endl;
 		while (true) {
 			cin >> temp;
 			if (temp == -1) {
 				break;
+			} if (temp > Habit_list.size() || temp < 1)
+			{
+				cout << "This habit is not in the list, please enter another habit code : ";
 			}
-			i_habits.push_back(temp);
+			else
+			{
+				i_habits.push_back(temp);
+			}
 		}
 		full_ini(i_Sid, i_name, i_friendcode, i_hobbies, i_habits);
 	}
