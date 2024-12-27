@@ -6,8 +6,10 @@
 #include <vector>
 #include <stdlib.h>
 #include <algorithm>
-using namespace std;
 
+using namespace std;
+#define RESET   "\033[0m"
+#define RED     "\033[31m"
 class Student {
 private:
 	void ini(int i_Sid, string i_name) {
@@ -41,14 +43,34 @@ public:
 			cout << "Friend not found" << endl;
 		}
 	}
-	void full_userin() {
+	int check_user2(int Sid, vector<Student> list) {
+		for (int i = 0; i < list.size(); i++) {
+			if (list[i].Sid == Sid) {
+				return 1;
+			}
+		}
+		return 0;
+	}
+	void full_userin(vector<Student> list_stdu) {
 		int i_Sid;
 		string i_name;
 		vector<int> i_friendcode; 
 		vector<int> i_hobbies;
 		vector<int> i_habits;
+		int tempSid;
 		cout << "Enter id student you want to add : ";
-		cin >> i_Sid;
+		cin >> tempSid;
+		do
+		{
+			i_Sid = tempSid;
+			if (check_user2(tempSid, list_stdu))
+			{
+				cout << "This student have added before, please enter another student id : ";
+				cin >> tempSid;
+			}
+			
+		} while (check_user2(tempSid, list_stdu));
+		
 		cout << endl << "Enter name of the student: ";
 		cin >> i_name;
 		cout << endl;

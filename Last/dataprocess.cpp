@@ -45,7 +45,7 @@ static void printfcode(int SSID, vector<Student>list) { // in code bạn bè
 static void inputindex(int n, vector<Student>& list) { // thêm n phần tử
 	for (int t = 0; t < n; t++) {
 		Student temp;
-		temp.full_userin();
+		temp.full_userin(list);
 		list.push_back(temp);
 	}
 }
@@ -102,6 +102,23 @@ static void student_save(Student a) { // lưu data vào file student_info.txt
 		cerr << "loi file luu thong tin student" << endl;
 	}
 }
+void clearFile(const string& filename) { // xóa nội dung file
+	ofstream file(filename, ios::out | ios::trunc);
+	if (!file.is_open()) {
+		cerr << "Loi : Khong mo duoc file " << filename << endl;
+		return;
+	}
+	file.close();
+
+}
+
+static void student_reset(vector<Student>& list, const string& filename) { // reset thông tin student
+	clearFile(filename);
+	for (int i = 0; i < list.size(); i++) {
+		student_save(list[i]);
+	}
+}
+
 static int countLines(const string& filename) { // trả về số dòng của 1 file, lưu ý file phải cùng directory với code và .exe
 	ifstream file(filename);
 	int lineCount = 0;

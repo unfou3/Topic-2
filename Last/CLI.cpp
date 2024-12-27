@@ -6,12 +6,12 @@
 #include <string>
 #include <Lmcons.h>
 #include <conio.h>
-#include "hobbycode.cpp"
-#include "dataprocess.cpp"
 #include <vector>
-#include "habitc.cpp"
+#include "dataprocess.cpp"
 #include <fstream>
 #include "makedot.cpp"
+#include "hobbycode.cpp"
+#include "habitc.cpp"
 
 using namespace std;
 
@@ -89,10 +89,13 @@ void showInforesult(int Sid, vector<Student> list) {
             std::cout << GREEN << "Name of Student " << Sid << ": " << list[i].name << "\n" << RESET;
             std::cout << GREEN << "Friends of Student " << Sid << ":\n" << RESET;
             print_vct(list[i].friendcode);
+            cout << "\n";
             std::cout << GREEN << "Hobbies of Student " << Sid << ":\n" << RESET;
             print_list_vct(codeToOutput(list[i].hobbies, Hobby_list));
+            cout << "\n";
             std::cout << GREEN << "Habits of Student " << Sid << ":\n" << RESET;
             print_list_vct(codeToOutput(list[i].habits, Habit_list));
+            cout << "\n";
             std::cout << YELLOW << "\nPress any key to comeback and continue the program...\n";
             _getch(); // Chờ người dùng nhấn phím bất kỳ
             return;
@@ -104,7 +107,7 @@ void showInforesult(int Sid, vector<Student> list) {
 
 void AddStudent(){
     Student temp;
-    temp.full_userin();
+    temp.full_userin(list);
     list.push_back(temp);
     student_save(temp);
 }
@@ -207,12 +210,14 @@ void showMainMenu(int role) {
     std::cout << BLUE << "\n--- Main Menu ---\n" << RESET;
 
     if (role == 2) { // Normal User Menu
+        student_reset(list, "student_info.txt");
         std::cout << GREEN << "Welcome Student " << user_id << "\n";
         std::cout << CYAN << "0. Exit\n";
         std::cout << "1. Change | Add | Delete\n";
         std::cout << "2. Suggest Friends\n";
         std::cout << "3. Show my Information\n";
     } else if (role == 1) { // Admin Menu
+        student_reset(list, "student_info.txt");
         std::cout << CYAN << "0. Exit\n";
         std::cout << "1. Show as Graph\n";
         std::cout << "2. Print List\n";
@@ -236,15 +241,22 @@ void ChangeandAdd() {
     switch (option) {
 
         case 1:
+        {
             std::cout << GREEN << "\nAdd operation selected.\n" << RESET;
             std::cout << CYAN << "Enter student ID to add as friends: ";
             int x;
             cin >> x ;
-            add_friend(x,user_id, list);
-            std::cout << GREEN << "Operation completed \n" << RESET;
+            if (check_user(x, list) == 1)
+            {
+                add_friend(x,user_id, list);
+                std::cout << GREEN << "Operation completed \n" << RESET;
+            } else {
+                std::cout << RED << "Student ID " << x << " was not found. Try again.\n" << RESET;
+            }
             std::cout << YELLOW << "\nPress any key to comeback and continue the program...\n";
             _getch(); // Chờ người dùng nhấn phím bất kỳ
             break;
+        }
         case 2:
             std::cout << GREEN << "\nDelete operation selected.\n" << RESET;
             std::cout << CYAN << "Enter student ID to delete as friends: ";
@@ -259,7 +271,7 @@ void ChangeandAdd() {
         {
             int option2;
             std::cout << GREEN << "\nAdd habits and hobbies operation selected.\n" << RESET;
-            std::cout << CYAN << "Select the option you want to change: ";
+            std::cout << CYAN << "Select the option you want to change: \n";
             std::cout << "1. Add hobby\n";
             std::cout << "2. Add habit\n";
             std::cout<< "0. Back\n" << RESET;
