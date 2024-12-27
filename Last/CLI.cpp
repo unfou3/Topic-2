@@ -32,8 +32,19 @@ void CLI(int role);
 int chooseUser();
 void printSystemInfo();
 void AddStudent();
+int check_user(int Sid, vector<Student> list);
+void showInforesult(int Sid, vector<Student> list);
+
+int user_id;
+vector<Student> list;
+vector<string> Habit_list;
+vector<string> Hobby_list;
+
 int main() {
     system("cls"); // Clear screen
+    Habit_list = output_habit();
+    Hobby_list = outputhb();
+    list = student_retrieve("student_info.txt");
     int role = chooseUser();
     if (role != 0) {
         CLI(role);
@@ -44,9 +55,24 @@ int main() {
 }
 typedef LONG(WINAPI* RtlGetVersionPtr)(PRTL_OSVERSIONINFOW);
 
-vector<Student> list;
-vector<string> Habit_list;
-vector<string> Hobby_list;
+void showInforesult(int Sid, vector<Student> list) {
+    for (int i = 0; i < list.size(); i++) {
+        if (list[i].Sid == Sid) {
+            std::cout << GREEN << "Name of Student " << Sid << ": " << list[i].name << "\n" << RESET;
+            std::cout << GREEN << "Friends of Student " << Sid << ":\n" << RESET;
+            print_vct(list[i].friendcode);
+            std::cout << GREEN << "Hobbies of Student " << Sid << ":\n" << RESET;
+            print_list_vct(codeToOutput(list[i].hobbies, Hobby_list));
+            std::cout << GREEN << "Habits of Student " << Sid << ":\n" << RESET;
+            print_list_vct(codeToOutput(list[i].habits, Habit_list));
+            std::cout << YELLOW << "\nPress any key to comeback and continue the program...\n";
+            _getch(); // Chờ người dùng nhấn phím bất kỳ
+            return;
+        }
+    }
+
+    std::cout << RED << "Student ID " << Sid << " was not found. Try again.\n" << RESET;
+}
 
 void AddStudent(){
     Student temp;
@@ -101,7 +127,15 @@ void printSystemInfo() {
         std::cerr << "Failed to get time zone information.\n";
     }
 }
-
+int check_user(int Sid, vector<Student> list) {
+    for (int i = 0; i < list.size(); i++) {
+        if (list[i].Sid == Sid) {
+            return 1;
+        }
+    }
+    std::cout << RED << "Student ID " << Sid << " was not found. Try again.\n" << RESET;
+    return 0;
+}
 // --- Choose User Role ---
 int chooseUser() {
     int option;
@@ -116,7 +150,17 @@ int chooseUser() {
         case 1:
             return 1; // Admin
         case 2:
-            return 2; // User
+            std::cout << GREEN << "Enter your Student ID: " << RESET;
+            std::cin >> user_id;
+            if (check_user(user_id, list) == 1)
+            {
+                return 2; // User
+            }
+            else
+            {
+                return chooseUser();
+            }
+
         case 0:
             return 0; // Exit
         default:
@@ -135,14 +179,16 @@ void showMainMenu(int role) {
     std::cout << BLUE << "\n--- Main Menu ---\n" << RESET;
 
     if (role == 2) { // Normal User Menu
+        std::cout << GREEN << "Welcome Student " << user_id << "\n";
         std::cout << CYAN << "0. Exit\n";
         std::cout << "1. Change | Add | Delete\n";
         std::cout << "2. Suggest Friends\n";
-        std::cout << "3. Add Student\n";
+        std::cout << "3. Show my Information\n";
     } else if (role == 1) { // Admin Menu
         std::cout << CYAN << "0. Exit\n";
         std::cout << "1. Show as Graph\n";
         std::cout << "2. Print List\n";
+        std::cout << "3. Add Student\n";
     }
 
     std::cout << YELLOW << "Type option: " << RESET;
@@ -151,9 +197,10 @@ void showMainMenu(int role) {
 // --- Change and Add options ---
 void ChangeandAdd() {
     int option;
-    std::cout << MAGENTA << "\n--- Change and Add options ---\n" << RESET;
-    std::cout << CYAN << "1. Add\n";
+    std::cout << MAGENTA << "\n--- Change and Add Friends options ---\n" << RESET;
+    std::cout << CYAN << "1. Add Friends\n";
     std::cout << "2. Delete\n";
+    std::cout << "3. Add hobbies and habits\n";
     std::cout << "0. Back\n" << RESET;
     std::cout << YELLOW << "Type option: " << RESET;
     std::cin >> option;
@@ -162,24 +209,49 @@ void ChangeandAdd() {
 
         case 1:
             std::cout << GREEN << "\nAdd operation selected.\n" << RESET;
-            std::cout << CYAN << "Enter two student IDs to add as friends: ";
-            int x,y;
-            cin >> x >> y;
-            add_friend(x,y, list);
+            std::cout << CYAN << "Enter student ID to add as friends: ";
+            int x;
+            cin >> x ;
+            add_friend(x,user_id, list);
             std::cout << GREEN << "Operation completed \n" << RESET;
             std::cout << YELLOW << "\nPress any key to comeback and continue the program...\n";
             _getch(); // Chờ người dùng nhấn phím bất kỳ
             break;
         case 2:
             std::cout << GREEN << "\nDelete operation selected.\n" << RESET;
-            std::cout << CYAN << "Enter two student IDs to delete as friends: ";
-            int a,b;
-            cin >> a >> b;
-            delete_friend(a,b, list);
+            std::cout << CYAN << "Enter student ID to delete as friends: ";
+            int a;
+            cin >> a;
+            delete_friend(a,user_id, list);
             std::cout << GREEN << "Operation completed.\n" << RESET;
             std::cout << YELLOW << "\nPress any key to comeback and continue the program...\n";
             _getch(); // Chờ người dùng nhấn phím bất kỳ
             break;
+        case 3:
+        {
+            int option2;
+            std::cout << GREEN << "\nAdd habits and hobbies operation selected.\n" << RESET;
+            std::cout << CYAN << "Select the option you want to change: ";
+            std::cout << "1. Add hobby\n";
+            std::cout << "2. Add habit\n";
+            std::cout<< "0. Back\n" << RESET;
+            std::cin >> option2;
+            switch (option2)
+            {
+            case 1:
+                cml_input_hobby_tx();
+                break;
+            
+            case 2:
+                cml_input_habit_tx();
+                break;
+            case 0:
+                break;
+            default:
+                std::cout << RED << "Invalid option.\n" << RESET;
+                break;
+            }
+        }
         case 0:
             break;
         default:
@@ -199,10 +271,10 @@ void SuggestFriends() {
     switch (option) {
         case 1:
             std::cout << GREEN << "\nSuggesting friends by Hobbies and Habits...\n" << RESET;
-            int Sid,x;
-            std::cout << "Enter Student ID and number of friends to suggest: ";
-            cin >> Sid >> x;
-            print_vct(probToF(list, Sid , x));
+            int x;
+            std::cout << "Enter Student number of friends to suggest: ";
+            cin >> x;
+            print_vct(probToF(list, user_id , x));
             std::cout << YELLOW << "\nPress any key to comeback and continue the program...\n";
             _getch(); // Chờ người dùng nhấn phím bất kỳ
             break;
@@ -251,7 +323,7 @@ void ShowList() {
     std::cout << MAGENTA << "\n--- Show List ---\n" << RESET;
     std::cout << CYAN << "1. Show all List of Student \n";
     std::cout << "2. Show the Student had the most friends \n";
-    std::cout << "3. Show habits, hobbies of a Student \n";
+    std::cout << "3. Show infor of a Student \n";
     std::cout << "0. Back \n" << RESET;
     std::cout << YELLOW << "Type option: " << RESET;
     std::cin >> option;
@@ -281,11 +353,7 @@ void ShowList() {
             std::cout << GREEN << "Enter Student ID: " << RESET;
             int Sid;
             cin >> Sid;
-            int a = getord(Sid, list);
-            std::cout << GREEN << "Hobbies of Student " << Sid << ":\n" << RESET;
-		    print_list_vct(codeToOutput(list[a].hobbies, Hobby_list));
-            std::cout << GREEN << "Habits of Student " << Sid << ":\n" << RESET;
-            print_list_vct(codeToOutput(list[a].habits, Habit_list));
+            showInforesult(Sid, list);
             std::cout << YELLOW << "\nPress any key to comeback and continue the program...\n";
             _getch(); // Chờ người dùng nhấn phím bất kỳ
             break;
@@ -298,9 +366,7 @@ void ShowList() {
 // --- Command Line Interface ---
 void CLI(int role) {
     int option;
-    Habit_list = output_habit();
-    Hobby_list = outputhb();
-    list = student_retrieve("student_info.txt");
+    
     do {
         showMainMenu(role);
         std::cin >> option;
@@ -309,7 +375,7 @@ void CLI(int role) {
             switch (option) {
                 case 1: ChangeandAdd(); break;
                 case 2: SuggestFriends(); break;
-                case 3: AddStudent(); break;
+                case 3: showInforesult(user_id, list); break;
                 case 0: std::cout << GREEN << "Exiting... Goodbye!\n" << RESET; break;
                 default: std::cout << RED << "Invalid option. Try again.\n" << RESET;
             }
@@ -317,6 +383,7 @@ void CLI(int role) {
             switch (option) {
                 case 1: ShowasGraph(); break;
                 case 2: ShowList(); break;
+                case 3: AddStudent(); break;
                 case 0: std::cout << GREEN << "Exiting... Goodbye!\n" << RESET; break;
                 default: std::cout << RED << "Invalid option. Try again.\n" << RESET;
             }
