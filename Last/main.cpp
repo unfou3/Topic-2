@@ -8,9 +8,13 @@
 
 int main() {
     system("cls"); // Clear screen
+    vector<string> outputdt;
+
     Habit_list = output_habit();
     Hobby_list = outputhb();
     list = student_retrieve("student_info.txt");
+    input_canh(list, outputdt);
+    writeVectorToFile(outputdt, "dothi.txt");
     int role = chooseUser();
     if (role != 0) {
         CLI(role);

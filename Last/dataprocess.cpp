@@ -321,3 +321,35 @@ static void print_full(vector<Student> stdu, vector<string> hbby, vector<string>
 		cout << endl;
 	}
 }
+
+string double_input(int a, int b) {
+    string result = to_string(a) + " " + to_string(b);
+    return result;
+}
+static void input_canh(const vector<Student> list, vector<string>& input) { //hàm hiển thị vector bạn bè
+	int temp = 0;
+	for (int i = 0; i < list.size(); i++)
+	{
+		for (int k = 0;k < list.size(); k++) {
+		    if (isFriend(list[i], list[k])) {
+		        input.push_back(double_input(i+1, k+1));
+				temp++;
+		    }
+		}
+	}
+	input.insert(input.begin(),double_input(list.size(), temp));
+}
+void writeVectorToFile(const vector<string>& vec, const string& filename) {
+    ofstream outFile(filename);
+
+    if (!outFile.is_open()) {
+        cerr << "Loi : Khong mo duoc file " << filename << endl;
+        return;
+    }
+
+    for (const string& line : vec) {
+        outFile << line << endl;
+    }
+
+    outFile.close();
+}

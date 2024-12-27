@@ -49,7 +49,7 @@ public:
 		vector<int> i_habits;
 		cout << "Enter id student you want to add : ";
 		cin >> i_Sid;
-		cout << endl << "Enter name of the student : ";
+		cout << endl << "Enter name of the student: ";
 		cin >> i_name;
 		cout << endl;
 		int temp;

@@ -12,8 +12,6 @@
 #include "habitc.cpp"
 #include <fstream>
 #include "makedot.cpp"
-#include "dsc.cpp"
-
 
 using namespace std;
 
@@ -45,7 +43,6 @@ int user_id;
 vector<Student> list;
 vector<string> Habit_list;
 vector<string> Hobby_list;
-
 // int main() {
 //     system("cls"); // Clear screen
 //     Habit_list = output_habit();
@@ -388,8 +385,6 @@ void ShowList() {
             int Sid;
             cin >> Sid;
             showInforesult(Sid, list);
-            std::cout << YELLOW << "\nPress any key to comeback and continue the program...\n";
-            _getch(); // Chờ người dùng nhấn phím bất kỳ
             break;
         }
         default:
