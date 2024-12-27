@@ -10,6 +10,10 @@
 #include "dataprocess.cpp"
 #include <vector>
 #include "habitc.cpp"
+#include <fstream>
+#include "makedot.cpp"
+#include "dsc.cpp"
+
 
 using namespace std;
 
@@ -33,27 +37,54 @@ int chooseUser();
 void printSystemInfo();
 void AddStudent();
 int check_user(int Sid, vector<Student> list);
+void openGraphImage();
 void showInforesult(int Sid, vector<Student> list);
+void generateGraphImage();
 
 int user_id;
 vector<Student> list;
 vector<string> Habit_list;
 vector<string> Hobby_list;
 
-int main() {
-    system("cls"); // Clear screen
-    Habit_list = output_habit();
-    Hobby_list = outputhb();
-    list = student_retrieve("student_info.txt");
-    int role = chooseUser();
-    if (role != 0) {
-        CLI(role);
-    } else {
-        std::cout << GREEN << "Exiting... Goodbye!\n" << RESET;
-    }
-    return 0;
-}
+// int main() {
+//     system("cls"); // Clear screen
+//     Habit_list = output_habit();
+//     Hobby_list = outputhb();
+//     list = student_retrieve("student_info.txt");
+//     int role = chooseUser();
+//     if (role != 0) {
+//         CLI(role);
+//     } else {
+//         std::cout << GREEN << "Exiting... Goodbye!\n" << RESET;
+//     }
+//     return 0;
+// }
 typedef LONG(WINAPI* RtlGetVersionPtr)(PRTL_OSVERSIONINFOW);
+void openGraphImage() {
+    std::string filePath = "graph.png"; // Update with full path if needed
+    std::ifstream file(filePath);
+    if (file.good()) {
+        std::cout << "Opening graph image: " << filePath << "\n";
+        HINSTANCE result = ShellExecute(NULL, "open", filePath.c_str(), NULL, NULL, SW_SHOWNORMAL);
+        if ((int)result > 32) {
+            std::cout << "Graph image opened successfully.\n";
+        } else {
+            std::cerr << "Failed to open graph image. Error code: " << (int)result << "\n";
+        }
+    } else {
+        std::cerr << "Graph image not found. Please ensure the image was generated successfully: " << filePath << "\n";
+    }
+}
+void generateGraphImage() {
+    // Command to generate the PNG image from the DOT file
+    const char* command = "dot -Tpng dothitomau.dot -o graph.png";
+    int result = system(command);
+    if (result == 0) {
+        std::cout << "Graph image generated successfully.\n";
+    } else {
+        std::cerr << "Failed to generate graph image. Please ensure Graphviz is installed and the dot command is available in the PATH.\n";
+    }
+}
 
 void showInforesult(int Sid, vector<Student> list) {
     for (int i = 0; i < list.size(); i++) {
@@ -290,7 +321,7 @@ void ShowasGraph() {
     int option;
     std::cout << MAGENTA << "\n--- Show as Graph ---\n" << RESET;
     std::cout << CYAN << "1. Show as adjacency matrix\n";
-    std::cout << "2.Show as png\n";
+    std::cout << "2. Show as png\n";
     std::cout << "0. Back\n" << RESET;
     std::cout << YELLOW << "Type option: " << RESET;
     std::cin >> option;
@@ -306,6 +337,9 @@ void ShowasGraph() {
         case 2:
             system("");
             std::cout << GREEN << "\n" << RESET;
+            makefdot();
+            generateGraphImage();
+            openGraphImage();
             std::cout << YELLOW << "\nPress any key to comeback and continue the program...\n";
             _getch(); // Chờ người dùng nhấn phím bất kỳ
             break;
@@ -366,7 +400,7 @@ void ShowList() {
 // --- Command Line Interface ---
 void CLI(int role) {
     int option;
-    
+
     do {
         showMainMenu(role);
         std::cin >> option;
