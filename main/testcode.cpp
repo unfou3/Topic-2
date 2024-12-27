@@ -237,7 +237,7 @@ int main() {
         }
     }
     for (const Student& student : studentList) {
-        cout << "Student had the number of friends are highest"
+        cout << "Student had the number of friends are highest" << endl;
         if (student.countFriends() == max)
         {
             student.displayFriends();
