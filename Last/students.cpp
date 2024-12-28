@@ -85,7 +85,8 @@ public:
 		} while (check_user2(tempSid, list_stdu));
 		
 		cout << endl << "Enter name of the student: ";
-		cin >> i_name;
+		cin.ignore();
+		getline(cin, i_name);
 		cout << endl;
 		int temp;
 		cout << "Enter friends of the student, enter -1 to stop : " << endl;

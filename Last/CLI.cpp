@@ -39,6 +39,8 @@ void showInforesult(int Sid, vector<Student> list);
 void generateGraphImage();
 void AddmyHobbiesandHabits();
 void DeleteUser();
+void DeleteHabit();
+void DeleteHobby();
 
 int user_id;
 vector<string> outputdt;
@@ -79,7 +81,42 @@ void DeleteUser() {
     std::cout << YELLOW << "\nPress any key to comeback and continue the program...\n";
     _getch(); // Chờ người dùng nhấn phím bất kỳ
 }
-
+void DeleteHabit(){
+    int code;
+    std::cout << GREEN << "Your habit is: \n" << RESET;
+    print_list_vct(codeToOutput(list[getord(user_id, list)].habits, Habit_list));
+    std::cout << GREEN << "Enter Habit index to delete: " << RESET;
+    std::cin >> code;
+    if (code > list[getord(user_id, list)].habits.size() || code < 1)
+    {
+        std::cout << RED << "Wrong input. NOTHING CHANGED\n" << RESET;
+    }
+    else
+    {
+        list[getord(user_id, list)].habits.erase(list[getord(user_id, list)].habits.begin() + code - 1);
+        std::cout << GREEN << "Habit has been deleted.\n" << RESET;
+    }
+    std::cout << YELLOW << "\nPress any key to comeback and continue the program...\n";
+    _getch(); // Chờ người dùng nhấn phím bất kỳ
+}
+void DeleteHobby(){
+    int code;
+    std::cout << GREEN << "Your hobby is: \n" << RESET;
+    print_list_vct(codeToOutput(list[getord(user_id, list)].hobbies, Hobby_list));
+    std::cout << GREEN << "Enter Hobby index to delete: " << RESET;
+    std::cin >> code;
+    if (code > list[getord(user_id, list)].hobbies.size() || code < 1)
+    {
+        std::cout << RED << "Wrong input. NOTHING CHANGED\n" << RESET;
+    }
+    else
+    {
+        list[getord(user_id, list)].hobbies.erase(list[getord(user_id, list)].hobbies.begin() + code - 1);
+        std::cout << GREEN << "Hobby has been deleted.\n" << RESET;
+    }
+    std::cout << YELLOW << "\nPress any key to comeback and continue the program...\n";
+    _getch(); // Chờ người dùng nhấn phím bất kỳ
+}
 void openGraphImage() {
     std::string filePath = "graph.png"; // Update with full path if needed
     std::ifstream file(filePath);
@@ -183,6 +220,8 @@ void showInforesult(int Sid, vector<Student> list) {
     }
 
     std::cout << RED << "Student ID " << Sid << " was not found. Try again.\n" << RESET;
+    std::cout << YELLOW << "\nPress any key to comeback and continue the program...\n";
+    _getch(); // Chờ người dùng nhấn phím bất kỳ
 }
 
 void AddStudent(){
@@ -313,9 +352,11 @@ void ChangeandAdd() {
     int option;
     std::cout << MAGENTA << "\n--- Change and Add Friends options ---\n" << RESET;
     std::cout << CYAN << "1. Add Friends\n";
-    std::cout << "2. Delete\n";
+    std::cout << "2. Delete Friends\n";
     std::cout << "3. Add new hobbies and habits into database\n";
     std::cout << "4. Add my hobbies and habits\n";
+    std::cout << "5. Delete my hobbies\n";
+    std::cout << "6. Delete my habits\n";
     std::cout << "0. Back\n" << RESET;
     std::cout << YELLOW << "Type option: " << RESET;
     std::cin >> option;
@@ -381,6 +422,16 @@ void ChangeandAdd() {
         case 4:
         {
             AddmyHobbiesandHabits();
+            break;
+        }
+        case 5:
+        {
+            DeleteHobby();
+            break;
+        }
+        case 6:
+        {
+            DeleteHabit();
             break;
         }
         case 0:
