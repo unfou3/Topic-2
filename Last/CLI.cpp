@@ -38,6 +38,7 @@ void openGraphImage();
 void showInforesult(int Sid, vector<Student> list);
 void generateGraphImage();
 void AddmyHobbiesandHabits();
+void DeleteUser();
 
 int user_id;
 vector<string> outputdt;
@@ -58,6 +59,27 @@ vector<string> Hobby_list;
 //     return 0;
 // }
 typedef LONG(WINAPI* RtlGetVersionPtr)(PRTL_OSVERSIONINFOW);
+void DeleteUser() {
+    int Sid;
+    std::cout << GREEN << "Enter Student ID to delete: " << RESET;
+    std::cin >> Sid;
+    if (check_user(Sid, list) == 1)
+    {
+        for (int a = 0; a <= list[getord(Sid, list)].friendcode.size(); a++)
+            delete_friend(Sid, list[getord(Sid, list)].friendcode[a], list);
+        
+        list.erase(list.begin() + getord(Sid, list));
+        student_reset(list, "student_info.txt");
+        std::cout << GREEN << "Student ID " << Sid << " has been deleted.\n" << RESET;
+    }
+    else
+    {
+        std::cout << RED << "Student ID " << Sid << " was not found. Try again.\n" << RESET;
+    }
+    std::cout << YELLOW << "\nPress any key to comeback and continue the program...\n";
+    _getch(); // Chờ người dùng nhấn phím bất kỳ
+}
+
 void openGraphImage() {
     std::string filePath = "graph.png"; // Update with full path if needed
     std::ifstream file(filePath);
@@ -280,6 +302,7 @@ void showMainMenu(int role) {
         std::cout << "1. Show as Graph\n";
         std::cout << "2. Print List\n";
         std::cout << "3. Add Student\n";
+        std::cout << "4. Delete Student\n";
     }
 
     std::cout << YELLOW << "Type option: " << RESET;
@@ -494,6 +517,7 @@ void CLI(int role) {
                 case 1: ShowasGraph(); break;
                 case 2: ShowList(); break;
                 case 3: AddStudent(); break;
+                case 4: DeleteUser(); break;
                 case 0: std::cout << GREEN << "Exiting... Goodbye!\n" << RESET; break;
                 default: std::cout << RED << "Invalid option. Try again.\n" << RESET;
             }

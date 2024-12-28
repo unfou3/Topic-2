@@ -8,7 +8,7 @@ using namespace std;
 static void cml_input_habit_tx() {  // thêm thói quen nhập tay
 	ofstream Filei("habitc.txt", ios::app);
 	if ((Filei.is_open())) {
-		cout << "Nhap thoi quen moi ban muon them : ";
+		cout << "Enter a habit you want to add in database : ";
 		string a;
 		cin.ignore();
 		getline(cin,a);
@@ -17,7 +17,7 @@ static void cml_input_habit_tx() {  // thêm thói quen nhập tay
 	}
 	else
 	{
-		cerr << "File habit loi" << endl;
+		cerr << "Error: habit file" << endl;
 	}
 }
 
@@ -33,7 +33,7 @@ static vector<string> output_habit() { // lên list habit vào vector
 	}
 	else
 	{
-		cerr << "File habit loi" << endl;
+		cerr << "Error: habit file" << endl;
 	}
 
 	//for (int i = 0; i < oup.size(); i++) {

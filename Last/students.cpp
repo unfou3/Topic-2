@@ -144,9 +144,9 @@ public:
 	void userin() {
 		int i_Sid;
 		string i_name;
-		cout << "nhap mssv : ";
+		cout << "Enter ID of student : ";
 		cin >> i_Sid;
-		cout << endl << "nhap ten : ";
+		cout << endl << "Enter name of student : ";
 		cin >> i_name;
 		cout << endl;
 		ini(i_Sid, i_name);

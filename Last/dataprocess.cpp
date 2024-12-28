@@ -73,7 +73,7 @@ static void print_list_vct(vector<string> b) { // in các phần tử dạng str
 }
 static void printing_Friend_name(Student std, vector<Student>& stdlist) { // in tên bạn bè
 	for (int i = 0; i < std.friendcode.size(); i++) {
-		cout << "ban thu " << i + 1 << " ten la: " << stdlist[getord(std.friendcode[i], stdlist)].name << " co mssv : " << std.friendcode[i]<<endl ;
+		cout << "The " << i + 1 << " friend's name is:  " << stdlist[getord(std.friendcode[i], stdlist)].name << " co mssv : " << std.friendcode[i]<<endl ;
 	}
 }
 
@@ -104,13 +104,13 @@ static void student_save(Student a) { // lưu data vào file student_info.txt
 		}
 	}
 	else {
-		cerr << "loi file luu thong tin student" << endl;
+		cerr << "Error: cant save data of the file." << endl;
 	}
 }
 void clearFile(const string& filename) { // xóa nội dung file
 	ofstream file(filename, ios::out | ios::trunc);
 	if (!file.is_open()) {
-		cerr << "Loi : Khong mo duoc file " << filename << endl;
+		cerr << "Error : Cant open the file " << filename << endl;
 		return;
 	}
 	file.close();
@@ -136,7 +136,7 @@ static int countLines(const string& filename) { // trả về số dòng của 1
 		file.close();
 	}
 	else {
-		cerr << "khong the mo file" << endl;
+		cerr << "Error: Cant open file" << endl;
 	}
 
 	return lineCount;
@@ -328,12 +328,12 @@ static void print_full(vector<Student> stdu, vector<string> hbby, vector<string>
 		// cout << "So thich (code) : ";
 		// print_vct(stdu[i].hobbies);
 		// cout << "\n";
-		cout << "So thich (real) : " << "\n";
+		cout << "So thich : " << "\n";
 		print_list_vct(codeToOutput(stdu[i].hobbies, hbby));
 		// cout << "thoi quen (code): ";
 		// print_vct(stdu[i].habits);
 		// cout << "\n";
-		cout << "Thoi quen (real) : " << "\n";
+		cout << "Thoi quen : " << "\n";
 		print_list_vct(codeToOutput(stdu[i].habits, hbit));
 		cout << "\n";
 		// cout << "Goi y tim ban :)) : ";
@@ -365,7 +365,7 @@ static void input_canh(const vector<Student> list, vector<string>& input) { //h�
 void writeVectorToFile(const vector<string>& vec, const string& filename) {
     ofstream outFile(filename);
     if (!outFile.is_open()) {
-        cerr << "Loi : Khong mo duoc file " << filename << endl;
+        cerr << "Error : Cant open the file " << filename << endl;
         return;
     }
 	

@@ -8,7 +8,7 @@ using namespace std;
 static void cml_input_hobby_tx() {
 	ofstream Filei("hobbyc.txt", ios::app);
 	if ((Filei.is_open())) {
-		cout << "Nhap so thich moi ban muon them : ";
+		cout << "Enter hobby you want to add in database: ";
 		string a;
 		cin.ignore();
 		getline(cin,a);
@@ -17,7 +17,7 @@ static void cml_input_hobby_tx() {
 	}
 	else
 	{
-		cerr << "File hobby loi" << endl;
+		cerr << "Error: hobby file" << endl;
 	}
 }
 
@@ -33,7 +33,7 @@ static vector<string> outputhb() {
 	}
 	else
 	{
-		cerr << "File hobby loi" << endl;
+		cerr << "Error: hobby file" << endl;
 	}
 
 	//for (int i =0; i < oup.size(); i++) {
