@@ -41,7 +41,7 @@ public:
 	void addfriendcode(int code) {
 		int temp = 0;
 			if ((count(friendcode.begin(), friendcode.end(), code)) > 0) {
-				cout << "This friend have added before :))" << endl;
+				cout << "This friend have added before" << endl;
 			}
 			else {
 				friendcode.push_back(code);

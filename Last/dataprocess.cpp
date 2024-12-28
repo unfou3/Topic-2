@@ -349,6 +349,7 @@ string double_input(int a, int b) {
     return result;
 }
 static void input_canh(const vector<Student> list, vector<string>& input) { //hàm hiển thị vector bạn bè
+	input.clear();
 	int temp = 0;
 	for (int i = 0; i < list.size(); i++)
 	{
@@ -363,12 +364,11 @@ static void input_canh(const vector<Student> list, vector<string>& input) { //h�
 }
 void writeVectorToFile(const vector<string>& vec, const string& filename) {
     ofstream outFile(filename);
-
     if (!outFile.is_open()) {
         cerr << "Loi : Khong mo duoc file " << filename << endl;
         return;
     }
-
+	
     for (const string& line : vec) {
         outFile << line << endl;
     }

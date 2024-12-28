@@ -37,8 +37,10 @@ int check_user(int Sid, vector<Student> list);
 void openGraphImage();
 void showInforesult(int Sid, vector<Student> list);
 void generateGraphImage();
+void AddmyHobbiesandHabits();
 
 int user_id;
+vector<string> outputdt;
 vector<Student> list;
 vector<string> Habit_list;
 vector<string> Hobby_list;
@@ -69,6 +71,63 @@ void openGraphImage() {
         }
     } else {
         std::cerr << "Graph image not found. Please ensure the image was generated successfully: " << filePath << "\n";
+    }
+}
+void AddmyHobbiesandHabits() {
+    int option;
+    std::cout << MAGENTA << "\n--- Add my hobbies and habits ---\n" << RESET;
+    std::cout << CYAN << "1. Add my hobbies\n";
+    std::cout << "2. Add my habits\n";
+    std::cout << "0. Back\n" << RESET;
+    std::cout << YELLOW << "Type option: " << RESET;
+    std::cin >> option;
+
+    switch (option) {
+        case 1:
+            std::cout << GREEN << "\nAdd hobbies operation selected.\n" << RESET;        
+            print_list_vct(Hobby_list);
+            cout << "Enter the code of hobbies you want to add, press -1 to stop: ";
+            int temp;
+            while (temp != -1) {
+                cin >> temp;
+                if (temp == -1) {
+                    break;
+                } if (temp > Hobby_list.size() || temp < 1)
+                {
+                    cout << "This hobby is not in the list, please enter another hobby code : ";
+                }
+                else
+                {
+                    list[getord(user_id, list)].hobbies.push_back(temp);
+                }
+            }
+            std::cout << YELLOW << "\nPress any key to comeback and continue the program...\n";
+            _getch(); // Chờ người dùng nhấn phím bất kỳ
+            break;
+        case 2:
+            std::cout << GREEN << "\nAdd habits operation selected.\n" << RESET;        
+            print_list_vct(Habit_list);
+            cout << "Enter the code of habits you want to add, press -1 to stop: ";
+            while (temp != -1) {
+                cin >> temp;
+                if (temp == -1) {
+                    break;
+                } if (temp > Habit_list.size() || temp < 1)
+                {
+                    cout << "This habit is not in the list, please enter another habit code : ";
+                }
+                else
+                {
+                    list[getord(user_id, list)].habits.push_back(temp);
+                }
+            }
+            std::cout << YELLOW << "\nPress any key to comeback and continue the program...\n";
+            _getch(); // Chờ người dùng nhấn phím bất kỳ
+            break;
+        case 0:
+            break;
+        default:
+            std::cout << RED << "Invalid option.\n" << RESET;
     }
 }
 void generateGraphImage() {
@@ -232,7 +291,8 @@ void ChangeandAdd() {
     std::cout << MAGENTA << "\n--- Change and Add Friends options ---\n" << RESET;
     std::cout << CYAN << "1. Add Friends\n";
     std::cout << "2. Delete\n";
-    std::cout << "3. Add hobbies and habits\n";
+    std::cout << "3. Add new hobbies and habits into database\n";
+    std::cout << "4. Add my hobbies and habits\n";
     std::cout << "0. Back\n" << RESET;
     std::cout << YELLOW << "Type option: " << RESET;
     std::cin >> option;
@@ -279,10 +339,14 @@ void ChangeandAdd() {
             {
             case 1:
                 cml_input_hobby_tx();
+                std::cout << YELLOW << "\nPress any key to comeback and continue the program...\n";
+                _getch(); // Chờ người dùng nhấn phím bất kỳ
                 break;
             
             case 2:
                 cml_input_habit_tx();
+                std::cout << YELLOW << "\nPress any key to comeback and continue the program...\n";
+                _getch(); // Chờ người dùng nhấn phím bất kỳ
                 break;
             case 0:
                 break;
@@ -290,6 +354,11 @@ void ChangeandAdd() {
                 std::cout << RED << "Invalid option.\n" << RESET;
                 break;
             }
+        }
+        case 4:
+        {
+            AddmyHobbiesandHabits();
+            break;
         }
         case 0:
             break;
@@ -333,7 +402,6 @@ void ShowasGraph() {
     std::cout << "0. Back\n" << RESET;
     std::cout << YELLOW << "Type option: " << RESET;
     std::cin >> option;
-
     switch (option) {
         case 1:
             system("");
@@ -345,6 +413,8 @@ void ShowasGraph() {
         case 2:
             system("");
             std::cout << GREEN << "\n" << RESET;
+            input_canh(list, outputdt);
+            writeVectorToFile(outputdt, "dothi.txt");
             makefdot();
             generateGraphImage();
             openGraphImage();

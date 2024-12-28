@@ -8,7 +8,6 @@
 
 int main() {
     system("cls"); // Clear screen
-    vector<string> outputdt;
 
     Habit_list = output_habit();
     Hobby_list = outputhb();

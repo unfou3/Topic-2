@@ -10,7 +10,8 @@ static void cml_input_hobby_tx() {
 	if ((Filei.is_open())) {
 		cout << "Nhap so thich moi ban muon them : ";
 		string a;
-		cin >> a;
+		cin.ignore();
+		getline(cin,a);
 		Filei << a << "\n";
 		Filei.close();
 	}

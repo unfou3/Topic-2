@@ -10,7 +10,8 @@ static void cml_input_habit_tx() {  // thêm thói quen nhập tay
 	if ((Filei.is_open())) {
 		cout << "Nhap thoi quen moi ban muon them : ";
 		string a;
-		cin >> a;
+		cin.ignore();
+		getline(cin,a);
 		Filei << a << "\n";
 		Filei.close();
 	}
